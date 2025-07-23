@@ -1,77 +1,150 @@
-import React, {useState} from 'react'
+import React, { useState } from "react";
 
 export default function TextForm(props) {
+  const [text, setText] = useState("Enter text here");
 
-    const handleUpClick = ()=>{
-       // console.log("Uppercase Clicked" + text);
-        let newText = text.toUpperCase();
-        setText(newText)
-        props.showAlert("Converted to Uppercase!", "success ");
-    }
-    const handleLoClick = ()=>{
-     // console.log("Lowercase Clicked" + text);
-      let newText = text.toLowerCase();
-      setText(newText)
-       props.showAlert("Converted to Lowercase!", "success ");
+  // ---- Text Manipulation Handlers ----
+  const handleUpClick = () => {
+    setText(text.toUpperCase());
+    props.showAlert(" Converted to Uppercase!", "success");
+  };
 
-  }
-  const handleClearClick = ()=>{
-    // console.log("Clear Clicked" + text);
-    let newText = '';
-    setText(newText)
-     props.showAlert("Text Cleared!", "success ");
+  const handleLoClick = () => {
+    setText(text.toLowerCase());
+    props.showAlert(" Converted to Lowercase!", "success");
+  };
 
-}
+  const handleClearClick = () => {
+    setText("");
+    props.showAlert(" Text Cleared!", "success");
+  };
 
-    const handleCopy = () => {
-      navigator.clipboard.writeText(text); 
-      document.getSelection().removeAllRanges();
-      props.showAlert("Copied to Clipboard!", "success ");
-  }
+  const handleSpeak = () => {
+    const speech = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(speech);
+    props.showAlert(" Text Spoke!", "success");
+  };
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    document.getSelection().removeAllRanges();
+    props.showAlert(" Copied to Clipboard!", "success");
+  };
 
   const handleExtraSpaces = () => {
-      let newText = text.split(/[ ]+/);
-      setText(newText.join(" "));
-      props.showAlert("Extra spaces removed!", "success ");
-  }
-const handleSpeak = () => {
-  const speech = new SpeechSynthesisUtterance(text);
-  window.speechSynthesis.speak(speech);
-  props.showAlert("Text Spoked!", "success ");
+    setText(text.split(/[ ]+/).join(" "));
+    props.showAlert(" Extra spaces removed!", "success");
+  };
 
-};
-
-    const handleOnChange = (event)=>{
-        console.log("on changed");
-        setText(event.target.value);
-
+  const handleFindReplace = () => {
+    const toReplace = prompt("Enter the word to replace:");
+    const replaceWith = prompt("Enter the replacement:");
+    if (toReplace && replaceWith) {
+      setText(text.replaceAll(toReplace, replaceWith));
+      props.showAlert(` Replaced "${toReplace}"`, "success");
     }
-    const [text, setText] = useState('Enter text here');
+  };
+
+  const handleTitleCase = () => {
+    let newText = text
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+    setText(newText);
+    props.showAlert(" Converted to Title Case!", "success");
+  };
+
+  const handleSentenceCase = () => {
+    let newText = text
+      .toLowerCase()
+      .replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase());
+    setText(newText);
+    props.showAlert(" Converted to Sentence Case!", "success");
+  };
+
+  const handleRemoveLineBreaks = () => {
+    setText(text.replace(/\n+/g, " "));
+    props.showAlert(" Line breaks removed!", "success");
+  };
+
+  const handleDownload = () => {
+    const element = document.createElement("a");
+    const file = new Blob([text], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = "textutils-output.txt";
+    document.body.appendChild(element);
+    element.click();
+    props.showAlert(" File Downloaded!", "success");
+  };
+
+  const handleOnChange = (event) => {
+    setText(event.target.value);
+  };
+
+  // ---- Text Stats ----
+  const wordsArray = text.trim().split(/\s+/).filter((word) => word.length > 0);
+  const wordCount = wordsArray.length;
+  const charCount = text.length;
+  const readingTime = (wordCount * 0.008).toFixed(2);
+  const avgWordLength = wordCount > 0 ? (wordsArray.reduce((acc, word) => acc + word.length, 0) / wordCount).toFixed(2) : 0;
 
   return (
-    <>
-   <div className="container" style={{color: props.mode==='dark'?'white':'#042743'}}>
-    <h2 className= 'mb-4'>{props.heading} </h2>
-<div className="mb-3">
+   <>
+      <div
+        className="px-2 w-100"
+        style={{
+          backgroundColor: props.mode === "dark" ? "#27435aff" : "#f8f9fa",
+          color: props.mode === "dark" ? "white" : "#27435aff",
+          padding: "20px",
+          borderRadius: "10px"
+        }}
+      >
+        <h2 className="mb-3">{props.heading}</h2>
+        <textarea
+          className="form-control mb-3 w-100"
+          value={text}
+          onChange={handleOnChange}
+          style={{
+            backgroundColor: props.mode === "dark" ? "#1c2e40" : "white",
+            color: props.mode === "dark" ? "white" : "#27435aff",
+            borderRadius: "10px",
+            padding: "15px"
+          }}
+          rows="10"
+        ></textarea>
 
-<textarea className="form-control" value={text} onChange={handleOnChange} style={{backgroundColor: props.mode==='dark'?'#13466e':'white', color: props.mode==='dark'?'white':'#042743'}} id="myBox" rows="8"></textarea></div>
-                <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleUpClick}>Convert to Uppercase</button>
-                <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleLoClick}>Convert to Lowercase</button>
-                <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleClearClick}>Clear text</button>
-                <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleSpeak}>Speak</button>
-                <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleCopy}>Copy Text</button>
-            <button disabled={text.length===0} className="btn btn-primary mx-1 my-1" onClick={handleExtraSpaces}>Remove Extra Spaces</button>
-       
-            </div>
+        <div className="d-flex flex-wrap gap-2 mb-3">
+          <button disabled={!text} className="btn btn-primary" onClick={handleUpClick}>Uppercase</button>
+          <button disabled={!text} className="btn btn-primary" onClick={handleLoClick}>Lowercase</button>
+          <button disabled={!text} className="btn btn-primary" onClick={handleClearClick}>Clear</button>
+          <button disabled={!text} className="btn btn-primary" onClick={handleSpeak}>Speak</button>
+          <button disabled={!text} className="btn btn-primary" onClick={handleCopy}>Copy</button>
+          <button disabled={!text} className="btn btn-primary" onClick={handleFindReplace}>Find & Replace</button>
+          <button disabled={!text} className="btn btn-primary" onClick={handleTitleCase}>Title Case</button>
+          <button disabled={!text} className="btn btn-primary" onClick={handleSentenceCase}>Sentence Case</button>
+          <button disabled={!text} className="btn btn-primary" onClick={handleExtraSpaces}>Remove Spaces</button>
+          <button disabled={!text} className="btn btn-primary" onClick={handleRemoveLineBreaks}>Remove Line Breaks</button>
+          <button disabled={!text} className="btn btn-primary" onClick={handleDownload}>Download</button>
+        </div>
+      </div>
 
-            <div className="container my-3" style={{color: props.mode==='dark'?'white':'#042743'}}>
-      <h2>Your Text Summary</h2>
-      <p>{text.split(" ").filter((element)=>{return element.length!==0}).length} words and {text.length} characters</p>
-      <p>{0.008 * text.split(" ").filter((element)=>{return element.length!==0}).length} Minutes read</p>
-      <h2>Preview</h2>
-      <p>{text.length>0?text:"Nothing to preview!"}</p>
-    </div>
+      <div
+        className="px-3 py-4 mt-3 w-100"
+        style={{
+          backgroundColor: props.mode === "dark" ? "#1c2e40" : "#f8f9fa",
+          color: props.mode === "dark" ? "white" : "#27435aff",
+          borderRadius: "10px"
+        }}
+      >
+        <h3>Your Text Summary</h3>
+        <ul className="list-unstyled">
+          <li><strong>Words:</strong> {wordCount}</li>
+          <li><strong>Characters:</strong> {charCount}</li>
+          <li><strong>Average Word Length:</strong> {avgWordLength} characters</li>
+          <li><strong>Estimated Reading Time:</strong> {readingTime} min</li>
+        </ul>
+      </div>
     </>
-  )
+  );
 }

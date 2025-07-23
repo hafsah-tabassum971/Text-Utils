@@ -25,22 +25,16 @@ const showAlert = (messege, type)=>{
   },1500 );
 }
 const toggleMode= ()=> {
-  if(mode === 'light'){
+if (mode === 'light') {
   setMode('dark');
-  document.body.style.backgroundColor = 'grey';
-  showAlert("Dark mode has been enabled!", "success ");
- // document.title = 'TextUtils - Dark Mode';
- {/* setInterval(() => {
-    document.title = 'Install TextUtils Now';
-  }, 2000);*/}
+  document.body.style.backgroundColor = '#7e7e81ff';
+  showAlert('Dark mode has been enabled!', 'success');
+} else {
+  setMode('light');
+  document.body.style.backgroundColor = 'white';
+  showAlert('Light mode has been enabled!', 'success');
 }
-  else {
-    setMode('light');
-    document.body.style.backgroundColor = 'white';
-    showAlert("Light mode has been enabled!", "success ");
-  //document.title = 'TextUtils - Light Mode'
 
-  }
 }
   return (
  <>
