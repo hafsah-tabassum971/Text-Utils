@@ -1,6 +1,4 @@
-
 import './App.css';
-//import About from './components/About';
 import Navbar from './components/Navbar';
 import React, { useState, useSyncExternalStore } from 'react'
 import TextForm from './components/TextForm';
@@ -57,7 +55,8 @@ const toggleMode= ()=> {
  {/* <Switch>*/
    /*       <Route exact path="/about">*/
    /*         <About mode={mode} />*/
-   /*       </Route>*/}
+   /*       </Route>*/
+   }
 
    {/*       <Route exact path="/">*/}
           <TextForm showAlert={showAlert} heading = "Try TextUtils - Word Counter, Character Counter" mode={mode} /> 
