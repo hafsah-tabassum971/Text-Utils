@@ -53,7 +53,7 @@ if (mode === 'light') {
    }
 
    {/*       <Route exact path="/">*/}
-          <TextForm showAlert={showAlert} heading = "Try TextUtils - Word Counter, Character Counter" mode={mode} /> 
+          <TextForm showAlert={showAlert} heading = "Real-Time Writing with Word & Character Insights" mode={mode} /> 
    {/*       </Route>*/}
  {/* </Switch>*/}
   </div>
