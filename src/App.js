@@ -43,7 +43,7 @@ if (mode === 'light') {
   */}
 
 {/*<Router>*/}
-<Navbar title = "TextUtils" about = "AboutTextutils" mode={mode} toggleMode={toggleMode}/>
+<Navbar title = "TextEditor" about = "AboutTextutils" mode={mode} toggleMode={toggleMode}/>
   <Alert alert = {alert}/>
   <div className="container my-3"> 
  {/* <Switch>*/
@@ -53,7 +53,7 @@ if (mode === 'light') {
    }
 
    {/*       <Route exact path="/">*/}
-          <TextForm showAlert={showAlert} heading = "Real-Time Writing with Word & Character Insights" mode={mode} /> 
+          <TextForm showAlert={showAlert} heading = "Try TextEditor - Type Freely, Count Instantly" mode={mode} /> 
    {/*       </Route>*/}
  {/* </Switch>*/}
   </div>
